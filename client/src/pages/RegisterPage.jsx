@@ -19,6 +19,7 @@ export function RegisterPage() {
     role: 'STUDENT',
   });
   const [departments, setDepartments] = useState([]);
+  const [isLoadingDepartments, setIsLoadingDepartments] = useState(true);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,18 +27,33 @@ export function RegisterPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let isMounted = true;
     async function loadDepartments() {
       try {
+        setIsLoadingDepartments(true);
         const data = await communityService.getDepartments();
-        setDepartments(data);
-        if (data.length > 0) {
-          setFormData((prev) => ({ ...prev, departmentId: data[0].id }));
+        if (isMounted) {
+          const list = Array.isArray(data) ? data : [];
+          setDepartments(list);
+          if (list.length > 0) {
+            setFormData((prev) => ({
+              ...prev,
+              departmentId: prev.departmentId || list[0].id,
+            }));
+          }
         }
       } catch (err) {
         console.error('Failed to load departments:', err);
+      } finally {
+        if (isMounted) {
+          setIsLoadingDepartments(false);
+        }
       }
     }
     loadDepartments();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleChange = (e) => {
@@ -136,13 +152,20 @@ export function RegisterPage() {
                 name="departmentId"
                 value={formData.departmentId}
                 onChange={handleChange}
-                className="w-full bg-campus-surface border border-campus-border text-campus-text-primary text-sm rounded-input py-2 px-3 focus:border-campus-primary focus:outline-none"
+                disabled={isLoadingDepartments}
+                className="w-full bg-campus-surface border border-campus-border text-campus-text-primary text-sm rounded-input py-2 px-3 focus:border-campus-primary focus:outline-none disabled:opacity-60"
               >
-                {departments.map((dept) => (
-                  <option key={dept.id} value={dept.id}>
-                    {dept.name} ({dept.code})
-                  </option>
-                ))}
+                {isLoadingDepartments ? (
+                  <option value="">Loading departments...</option>
+                ) : departments.length === 0 ? (
+                  <option value="">No departments available</option>
+                ) : (
+                  departments.map((dept) => (
+                    <option key={dept.id} value={dept.id}>
+                      {dept.name} ({dept.code})
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 

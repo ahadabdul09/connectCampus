@@ -6,6 +6,10 @@ import { sendSuccess } from '../utils/response.js';
 
 const router = Router();
 
+// Public route: accessible without authentication for registration and campus directory
+router.get('/departments', CommunityController.getDepartments);
+
+// All subsequent routes require authentication
 router.use(authGuard);
 
 router.get('/', async (req, res, next) => {
@@ -18,7 +22,6 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/departments', CommunityController.getDepartments);
 router.get('/clubs', CommunityController.getClubs);
 router.get('/clubs/:id', CommunityController.getClubDetails);
 router.post('/clubs/:id/join', CommunityController.joinClub);

@@ -45,6 +45,16 @@ describe('connectCampus API & Security Tests', () => {
     expect(res.body.status).toBe('healthy');
   });
 
+  it('GET /api/communities/departments should be publicly accessible without auth for registration', async () => {
+    const res = await request(app).get('/api/communities/departments');
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBeGreaterThan(0);
+    expect(res.body.data[0].id).toBeDefined();
+    expect(res.body.data[0].name).toBeDefined();
+  });
+
   it('POST /api/auth/login should reject invalid passwords', async () => {
     const res = await request(app)
       .post('/api/auth/login')

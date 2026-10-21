@@ -4,7 +4,11 @@ export const registerSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters long.').max(100),
   email: z.string().email('Please enter a valid academic email address.'),
   password: z.string().min(6, 'Password must be at least 6 characters long.'),
-  departmentId: z.string().uuid('Please select a valid academic department.').optional().nullable(),
+  departmentId: z
+    .string()
+    .optional()
+    .nullable()
+    .transform((val) => (val && val.trim() !== '' ? val.trim() : null)),
   batch: z.string().max(50).optional().nullable(),
   studentId: z.string().max(30).optional().nullable(),
   role: z.enum(['STUDENT', 'FACULTY', 'CLUB_COORDINATOR', 'DEPT_ADMIN', 'SUPER_ADMIN']).default('STUDENT'),
