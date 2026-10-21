@@ -1,0 +1,29 @@
+{
+  "name": "connect-campus",
+  "version": "1.0.0",
+  "private": true,
+  "description": "connectCampus - A communication and collaboration platform for college students, faculty, clubs, and departments.",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=server & npm run dev --workspace=client",
+    "dev:server": "npm run dev --workspace=server",
+    "dev:client": "npm run dev --workspace=client",
+    "build": "npm run build --workspace=server && npm run build --workspace=client",
+    "seed": "npm run seed --workspace=server",
+    "test": "npm run test --workspace=server && npm run test --workspace=client",
+    "lint": "npm run lint --workspace=server && npm run lint --workspace=client"
+  },
+  "keywords": [
+    "campus",
+    "university",
+    "real-time",
+    "messaging",
+    "academic",
+    "collaboration"
+  ],
+  "author": "connectCampus Team",
+  "license": "MIT"
+}

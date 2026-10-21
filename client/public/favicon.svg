@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Rounded campus crest badge -->
+  <rect width="64" height="64" rx="14" fill="#245C4A" />
+  <!-- Understated architectural campus arch & node interconnection -->
+  <path d="M18 46V28C18 20.268 24.268 14 32 14C39.732 14 46 20.268 46 28V46" stroke="#F7F5F0" stroke-width="4" stroke-linecap="round" />
+  <path d="M26 46V32C26 28.686 28.686 26 32 26C35.314 26 38 28.686 38 32V46" stroke="#F7F5F0" stroke-width="3" stroke-linecap="round" />
+  <line x1="14" y1="46" x2="50" y2="46" stroke="#F7F5F0" stroke-width="3.5" stroke-linecap="round" />
+  <!-- Terracotta accent beacon -->
+  <circle cx="32" cy="14" r="4.5" fill="#C66A4A" stroke="#F7F5F0" stroke-width="1.5" />
+</svg>
