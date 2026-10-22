@@ -14,21 +14,10 @@ import {
 } from 'lucide-react';
 import { Button } from '../components/Button.jsx';
 import { Badge } from '../components/Badge.jsx';
-import { DEMO_ACCOUNTS } from '../constants/index.js';
-import { useAuthStore } from '../stores/authStore.js';
+import { CAMPUS_ROLES_INFO } from '../constants/index.js';
 
 export function LandingPage() {
-  const { login } = useAuthStore();
   const navigate = useNavigate();
-
-  const handleDemoLogin = async (account) => {
-    try {
-      await login(account.email, account.password);
-      navigate('/dashboard');
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   return (
     <div className="flex flex-col">
@@ -113,10 +102,10 @@ export function LandingPage() {
                 </span>
                 <div className="p-2.5 rounded bg-campus-surface border border-campus-border mt-2">
                   <p className="text-xs font-semibold text-campus-text-primary">
-                    Deloitte Drive Released
+                    Placement Assessment Scheduled
                   </p>
                   <p className="text-[11px] text-campus-text-secondary mt-0.5">
-                    Round 1 Aptitude Test this Friday. Cutoff 7.0 CGPA.
+                    Technical evaluation session this Friday at 10:00 AM.
                   </p>
                 </div>
               </div>
@@ -150,7 +139,7 @@ export function LandingPage() {
                       <span className="text-[10px] text-campus-text-muted">10:14 AM</span>
                     </div>
                     <p className="text-xs text-campus-text-secondary leading-relaxed">
-                      Important update: Deloitte has shared their campus drive schedule. Round 1 online aptitude and coding round will be conducted on Friday at 10:00 AM.
+                      Important update: The annual campus recruitment drive schedule has been published. Round 1 online aptitude and coding will take place this Friday at 10:00 AM.
                     </p>
                   </div>
                 </div>
@@ -160,16 +149,16 @@ export function LandingPage() {
                   <div className="bg-campus-primary text-white rounded-card p-3 max-w-[85%]">
                     <div className="flex items-center justify-between gap-2 mb-1">
                       <span className="text-xs font-semibold text-white/90">
-                        Abdul Ahad
+                        Alex Morgan (Student)
                       </span>
                       <span className="text-[10px] text-white/70">10:18 AM</span>
                     </div>
                     <p className="text-xs text-white leading-relaxed">
-                      Does anyone have the updated aptitude syllabus for tomorrow's placement test?
+                      Has the placement cell posted the updated syllabus and practice questions in the resource bank?
                     </p>
                   </div>
                   <div className="w-8 h-8 rounded-full bg-[#245C4A] text-white flex items-center justify-center font-bold text-xs shrink-0">
-                    AA
+                    AM
                   </div>
                 </div>
 
@@ -186,7 +175,7 @@ export function LandingPage() {
                       <span className="text-[10px] text-campus-text-muted">10:22 AM</span>
                     </div>
                     <p className="text-xs text-campus-text-secondary leading-relaxed">
-                      The assessment consists of 30 quantitative aptitude questions, 20 logical reasoning questions, and 2 hands-on coding problems. Notes are in the resources repository.
+                      Yes, the assessment blueprint includes 30 quantitative reasoning, 20 logical puzzles, and 2 algorithmic questions. The study pack is pinned in the resources tab.
                     </p>
                     <div className="flex items-center gap-1.5 mt-2">
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-campus-surface border border-campus-border text-[11px] text-campus-text-primary font-medium">
@@ -223,13 +212,13 @@ export function LandingPage() {
                 </div>
                 <div className="bg-campus-surface border border-campus-border rounded-card p-3 text-xs flex flex-col gap-2">
                   <p className="font-semibold text-campus-text-primary">
-                    Q: "What did the placement group discuss about Deloitte yesterday?"
+                    Q: "What are the eligibility criteria and format for the upcoming recruitment drive?"
                   </p>
                   <p className="text-campus-text-secondary leading-relaxed text-[11px]">
-                    "Deloitte Round 1 test is scheduled for Friday 10:00 AM. 30 Quant, 20 Logical, and 2 coding tasks. Minimum cutoff is 65% aggregate."
+                    "Round 1 evaluation is scheduled for Friday 10:00 AM. Format: 30 Quantitative, 20 Logical Reasoning, and 2 coding tasks. Minimum cutoff is 65% aggregate."
                   </p>
                   <span className="text-[10px] text-campus-text-muted pt-1 border-t border-campus-border">
-                    Verified from Placement Notice #24 & Dr. Kavitha message.
+                    Verified from Placement Circular #24 & Dr. Kavitha update.
                   </span>
                 </div>
               </div>
@@ -239,10 +228,10 @@ export function LandingPage() {
                   Upcoming Registered Event
                 </p>
                 <p className="text-campus-text-primary text-[11px]">
-                  Deloitte Placement Readiness Workshop
+                  Campus Technical Symposium & Career Workshop
                 </p>
                 <p className="text-campus-text-muted text-[10px] mt-0.5">
-                  Seminar Hall 1 • Oct 26, 2:00 PM
+                  Auditorium Block • Friday, 2:00 PM
                 </p>
               </div>
             </div>
@@ -250,23 +239,23 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Instant 1-Click Role Evaluation Launcher */}
+      {/* Institutional Roles Overview */}
       <section className="bg-campus-secondary/50 border-y border-campus-border py-14 px-4 sm:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
             <Badge variant="primary" className="mb-2">
-              Ready to Evaluate
+              Institutional Governance
             </Badge>
             <h2 className="font-serif text-2xl sm:text-3xl text-campus-text-primary font-bold">
-              Explore with Pre-Configured Demo Accounts
+              Built for Every Member of Campus
             </h2>
             <p className="text-xs sm:text-sm text-campus-text-secondary mt-1">
-              Select any persona to sign in immediately with realistic permissions and pre-populated data.
+              connectCampus provides dedicated interfaces, permission levels, and collaboration tools tailored to academic community roles.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {DEMO_ACCOUNTS.map((account, idx) => (
+            {CAMPUS_ROLES_INFO.map((roleInfo, idx) => (
               <div
                 key={idx}
                 className="bg-campus-surface border border-campus-border rounded-card p-4 hover:border-campus-primary/60 transition-colors flex flex-col justify-between"
@@ -274,27 +263,24 @@ export function LandingPage() {
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-semibold text-sm text-campus-text-primary">
-                      {account.roleName}
+                      {roleInfo.roleName}
                     </span>
-                    <Badge variant="neutral">{account.badge}</Badge>
+                    <Badge variant="neutral">{roleInfo.badge}</Badge>
                   </div>
-                  <p className="text-xs font-mono text-campus-text-secondary mb-2">
-                    {account.email}
-                  </p>
                   <p className="text-xs text-campus-text-secondary leading-relaxed mb-4">
-                    {account.description}
+                    {roleInfo.description}
                   </p>
                 </div>
 
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="w-full text-xs font-semibold"
-                  onClick={() => handleDemoLogin(account)}
-                >
-                  Sign In as {account.roleName}
-                  <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                </Button>
+                <div className="pt-2 border-t border-campus-border/50">
+                  <Link
+                    to="/register"
+                    className="text-xs font-semibold text-campus-primary hover:underline inline-flex items-center"
+                  >
+                    Join with College ID
+                    <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  </Link>
+                </div>
               </div>
             ))}
           </div>

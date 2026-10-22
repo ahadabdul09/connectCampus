@@ -1,4 +1,6 @@
 import { CommunityService } from '../services/communityService.js';
+import { AdminService } from '../services/adminService.js';
+import { clubSchema } from '../validators/authValidator.js';
 import { sendSuccess } from '../utils/response.js';
 
 export class CommunityController {
@@ -42,6 +44,19 @@ export class CommunityController {
     try {
       const result = await CommunityService.leaveClub(req.params.id, req.user.id);
       sendSuccess(res, result, 'Left club.');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async createClub(req, res, next) {
+    try {
+      const validated = clubSchema.parse(req.body);
+      const club = await AdminService.createClub({
+        ...validated,
+        leadId: validated.leadId || req.user.id,
+      });
+      sendSuccess(res, club, 'Club created successfully.', 201);
     } catch (error) {
       next(error);
     }

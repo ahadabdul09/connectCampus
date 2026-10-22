@@ -190,32 +190,44 @@ export function ProfilePage() {
             <h3 className="text-xs font-semibold uppercase tracking-wider text-campus-text-secondary pb-2 border-b border-campus-border">
               Affiliated Department
             </h3>
-            <p className="text-sm font-semibold text-campus-text-primary">
-              {user?.department?.name || 'Information Science & Engineering'}
-            </p>
-            <p className="text-xs text-campus-text-secondary leading-relaxed">
-              Dean & Head of Department: Prof. K. N. Sharma
-            </p>
+            {user?.department ? (
+              <>
+                <p className="text-sm font-semibold text-campus-text-primary">
+                  {user.department.name} ({user.department.code})
+                </p>
+                {user.department.headOfDepartment && (
+                  <p className="text-xs text-campus-text-secondary leading-relaxed">
+                    Head of Department: {user.department.headOfDepartment}
+                  </p>
+                )}
+              </>
+            ) : (
+              <p className="text-xs text-campus-text-secondary italic">
+                No department affiliated yet.
+              </p>
+            )}
           </div>
 
           <div className="bg-campus-surface border border-campus-border rounded-container p-5 shadow-subtle flex flex-col gap-3">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-campus-text-secondary pb-2 border-b border-campus-border">
               Club Memberships
             </h3>
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between p-2 rounded bg-campus-secondary/40 text-xs">
-                <span className="font-medium text-campus-text-primary">
-                  Campus Coding Club
-                </span>
-                <Badge variant="primary">Member</Badge>
+            {user?.clubMembers?.length > 0 ? (
+              <div className="flex flex-col gap-2">
+                {user.clubMembers.map((m) => (
+                  <div key={m.id || m.club?.id} className="flex items-center justify-between p-2 rounded bg-campus-secondary/40 text-xs">
+                    <span className="font-medium text-campus-text-primary">
+                      {m.club?.name}
+                    </span>
+                    <Badge variant="primary">{m.role || 'Member'}</Badge>
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center justify-between p-2 rounded bg-campus-secondary/40 text-xs">
-                <span className="font-medium text-campus-text-primary">
-                  Placement Preparation 2026
-                </span>
-                <Badge variant="accent">Participant</Badge>
-              </div>
-            </div>
+            ) : (
+              <p className="text-xs text-campus-text-secondary italic">
+                Not enrolled in any student clubs yet. Browse the Communities tab to join.
+              </p>
+            )}
           </div>
         </div>
       </div>

@@ -22,6 +22,7 @@ model User {
   avatarUrl      String?
   bio            String?
   isOnline       Boolean   @default(false)
+  isActive       Boolean   @default(true)
   lastSeenAt     DateTime  @default(now())
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
@@ -42,6 +43,7 @@ model User {
   refreshTokens       RefreshToken[]
   aiConversations     AIConversation[]
   uploadedDocuments   Document[]
+  sentInvitations     Invitation[]         @relation("SentInvitations")
 
   @@index([email])
   @@index([departmentId])
@@ -82,6 +84,7 @@ model Department {
   events           Event[]
   resources        Resource[]
   documents        Document[]
+  invitations      Invitation[]
 
   @@index([code])
 }
@@ -457,3 +460,25 @@ model AIConversation {
   @@index([userId])
   @@index([createdAt])
 }
+
+// ==========================================
+// Administrative Invitations
+// ==========================================
+model Invitation {
+  id           String      @id @default(uuid())
+  email        String      @unique
+  role         String      @default("STUDENT")
+  departmentId String?
+  token        String      @unique
+  expiresAt    DateTime
+  invitedById  String
+  acceptedAt   DateTime?
+  createdAt    DateTime    @default(now())
+
+  invitedBy    User        @relation("SentInvitations", fields: [invitedById], references: [id], onDelete: Cascade)
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+
+  @@index([token])
+  @@index([email])
+}
+

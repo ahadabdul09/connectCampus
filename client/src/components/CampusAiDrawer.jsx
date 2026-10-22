@@ -58,8 +58,8 @@ export function CampusAiDrawer({ isOpen, onClose }) {
 
   const quickPrompts = [
     {
-      label: 'Deloitte Placement Eligibility',
-      prompt: 'What are the eligibility criteria and test format for the Deloitte recruitment drive?',
+      label: 'Academic Evaluation & Grading',
+      prompt: 'What are the semester evaluation criteria and grade conversion policies?',
       mode: 'CAMPUS_QA',
       icon: BookOpen,
     },

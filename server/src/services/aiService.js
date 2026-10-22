@@ -75,29 +75,8 @@ export class AIService {
       if (score > 0) {
         scoredChunks.push({
           content: chunk.content,
-          source: `${chunk.document.title} (Part ${chunk.chunkIndex + 1})`,
+          source: `${chunk.document.title} (Section ${chunk.chunkIndex + 1})`,
           score,
-        });
-      }
-    }
-
-    if (keywords.length > 0) {
-      const relevantMessages = await prisma.message.findMany({
-        where: {
-          OR: keywords.map((kw) => ({ content: { contains: kw } })),
-        },
-        include: {
-          sender: { select: { fullName: true } },
-          conversation: { select: { title: true } },
-        },
-        take: 5,
-      });
-
-      for (const msg of relevantMessages) {
-        scoredChunks.push({
-          content: `${msg.sender.fullName}: "${msg.content}"`,
-          source: `Conversation: ${msg.conversation.title || 'Direct Chat'}`,
-          score: 3,
         });
       }
     }
@@ -108,7 +87,7 @@ export class AIService {
     if (topContext.length === 0) {
       return {
         answer:
-          "I could not locate specific records or verified documents regarding this inquiry in the current campus database. For accurate guidance, please consult your department academic advisor or check the official Announcements tab.",
+          "I couldn't find that information in the campus documents. Please consult your department office or an academic administrator.",
         citations: [],
       };
     }
@@ -263,5 +242,46 @@ ${topics.map((t) => `- ${t}`).join('\n')}
 
     const data = await res.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+  }
+
+  static async ingestDocument({ title, category, departmentId, uploaderId, content }) {
+    if (!title || !content) {
+      throw new Error('Title and content are required to ingest a campus document.');
+    }
+
+    const words = content.trim().split(/\s+/);
+    const chunkSize = 200;
+    const overlap = 40;
+    const chunks = [];
+
+    for (let i = 0; i < words.length; i += chunkSize - overlap) {
+      const slice = words.slice(i, i + chunkSize).join(' ');
+      if (slice.trim().length > 0) {
+        chunks.push(slice.trim());
+      }
+      if (i + chunkSize >= words.length) break;
+    }
+
+    const doc = await prisma.document.create({
+      data: {
+        title: title.trim(),
+        category: category || 'HANDBOOK',
+        departmentId: departmentId || null,
+        uploaderId,
+        chunkCount: chunks.length,
+      },
+    });
+
+    for (let idx = 0; idx < chunks.length; idx++) {
+      await prisma.documentChunk.create({
+        data: {
+          documentId: doc.id,
+          chunkIndex: idx,
+          content: chunks[idx],
+        },
+      });
+    }
+
+    return doc;
   }
 }

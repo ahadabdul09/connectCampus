@@ -60,6 +60,31 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
+  acceptInvite: async (inviteData) => {
+    set({ isLoading: true, error: null });
+    try {
+      const data = await authService.acceptInvite(inviteData);
+      localStorage.setItem('connectcampus_access_token', data.accessToken);
+      localStorage.setItem('connectcampus_refresh_token', data.refreshToken);
+      localStorage.setItem('connectcampus_user', JSON.stringify(data.user));
+
+      set({
+        user: data.user,
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+
+      socketService.connect();
+      return data;
+    } catch (err) {
+      const msg = err.response?.data?.error || err.message || 'Invitation acceptance failed.';
+      set({ error: msg, isLoading: false });
+      throw new Error(msg);
+    }
+  },
+
   logout: async () => {
     try {
       const refreshToken = get().refreshToken;

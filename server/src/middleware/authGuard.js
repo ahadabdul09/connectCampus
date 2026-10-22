@@ -24,11 +24,16 @@ export async function authGuard(req, res, next) {
         role: true,
         fullName: true,
         departmentId: true,
+        isActive: true,
       },
     });
 
     if (!user) {
       return sendError(res, 'User account no longer exists.', 401);
+    }
+
+    if (user.isActive === false) {
+      return sendError(res, 'This campus account has been deactivated by administration.', 403);
     }
 
     req.user = {
@@ -37,6 +42,7 @@ export async function authGuard(req, res, next) {
       role: user.role,
       fullName: user.fullName,
       departmentId: user.departmentId,
+      isActive: user.isActive,
     };
 
     next();

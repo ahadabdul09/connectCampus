@@ -20,6 +20,7 @@ import {
 import { useAuthStore } from '../stores/authStore.js';
 import { useChatStore } from '../stores/chatStore.js';
 import { chatService } from '../services/chatService.js';
+import { authService } from '../services/authService.js';
 import { socketService } from '../services/socket.js';
 import { Avatar } from '../components/Avatar.jsx';
 import { Badge } from '../components/Badge.jsx';
@@ -57,13 +58,48 @@ export function ChatPage() {
   const [editingMessage, setEditingMessage] = useState(null);
   const [showRightDrawer, setShowRightDrawer] = useState(true);
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
-  const [newChatTitle, setNewChatTitle] = useState('');
-  const [newChatType, setNewChatType] = useState('DIRECT');
-  const [campusUsers, setCampusUsers] = useState([]);
-  const [selectedUserIds, setSelectedUserIds] = useState([]);
+  const [userSearchQuery, setUserSearchQuery] = useState('');
+  const [searchedUsers, setSearchedUsers] = useState([]);
+  const [isSearchingUsers, setIsSearchingUsers] = useState(false);
 
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    if (!isNewChatModalOpen) return;
+    let isMounted = true;
+    async function searchPeers() {
+      setIsSearchingUsers(true);
+      try {
+        const users = await authService.getCampusUsers({ search: userSearchQuery });
+        if (isMounted) setSearchedUsers(users || []);
+      } catch (err) {
+        console.error('Failed to search campus peers:', err);
+      } finally {
+        if (isMounted) setIsSearchingUsers(false);
+      }
+    }
+    const timer = setTimeout(searchPeers, 250);
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+    };
+  }, [userSearchQuery, isNewChatModalOpen]);
+
+  const handleCreateNewConversation = async (targetUserId) => {
+    try {
+      const conv = await chatService.createConversation({
+        type: 'DIRECT',
+        participantIds: [targetUserId],
+      });
+      setIsNewChatModalOpen(false);
+      setUserSearchQuery('');
+      await fetchConversations();
+      selectConversation(conv.id);
+    } catch (err) {
+      alert(err.message || 'Failed to start conversation.');
+    }
+  };
 
   useEffect(() => {
     fetchConversations();
@@ -177,7 +213,7 @@ export function ChatPage() {
             <Button
               size="sm"
               variant="outline"
-              onClick={() => alert('New conversations are created directly via batch channels, communities, and faculty groups.')}
+              onClick={() => setIsNewChatModalOpen(true)}
               className="p-1.5 h-7 w-7"
               title="Start direct conversation"
             >
@@ -244,8 +280,12 @@ export function ChatPage() {
               <div className="h-12 bg-campus-secondary/60 rounded animate-pulse" />
             </div>
           ) : filteredConversations.length === 0 ? (
-            <div className="p-6 text-center text-xs text-campus-text-secondary">
-              No matching conversations.
+            <div className="p-6 text-center text-xs text-campus-text-secondary flex flex-col items-center gap-2.5">
+              <p>Your conversations will appear here.</p>
+              <Button size="sm" variant="outline" onClick={() => setIsNewChatModalOpen(true)}>
+                <Plus className="w-3.5 h-3.5" />
+                Start Discussion
+              </Button>
             </div>
           ) : (
             filteredConversations.map((conv) => {
@@ -674,6 +714,64 @@ export function ChatPage() {
           </div>
         </div>
       )}
+
+      {/* MODAL: Start New Conversation */}
+      <Modal
+        isOpen={isNewChatModalOpen}
+        onClose={() => setIsNewChatModalOpen(false)}
+        title="Start Academic Discussion"
+      >
+        <div className="flex flex-col gap-3.5 text-xs">
+          <p className="text-campus-text-secondary">
+            Search for campus students, faculty members, or department staff to begin an academic discussion.
+          </p>
+
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-campus-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search by name, roll, or email..."
+              value={userSearchQuery}
+              onChange={(e) => setUserSearchQuery(e.target.value)}
+              className="w-full pl-8 pr-3 py-2 bg-campus-secondary/40 border border-campus-border rounded text-xs text-campus-text-primary focus:bg-campus-surface focus:border-campus-primary focus:outline-none"
+              autoFocus
+            />
+          </div>
+
+          <div className="max-h-60 overflow-y-auto divide-y divide-campus-border/60 border border-campus-border rounded bg-campus-surface">
+            {isSearchingUsers ? (
+              <div className="py-6 text-center text-xs text-campus-text-secondary">
+                Searching campus directory...
+              </div>
+            ) : searchedUsers.length === 0 ? (
+              <div className="py-6 text-center text-xs text-campus-text-secondary">
+                No matching campus members found.
+              </div>
+            ) : (
+              searchedUsers.map((u) => (
+                <div
+                  key={u.id}
+                  onClick={() => handleCreateNewConversation(u.id)}
+                  className="p-2.5 flex items-center justify-between hover:bg-campus-secondary/60 cursor-pointer transition-colors"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Avatar name={u.fullName} size="sm" isOnline={u.isOnline} showStatus />
+                    <div>
+                      <p className="font-semibold text-campus-text-primary">{u.fullName}</p>
+                      <p className="text-[11px] text-campus-text-muted">
+                        {u.role} • {u.department ? u.department.name : u.email}
+                      </p>
+                    </div>
+                  </div>
+                  <Button size="sm" variant="outline">
+                    Message
+                  </Button>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

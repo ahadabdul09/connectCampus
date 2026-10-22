@@ -4,7 +4,6 @@ import { Mail, Lock, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore.js';
 import { Input } from '../components/Input.jsx';
 import { Button } from '../components/Button.jsx';
-import { DEMO_ACCOUNTS } from '../constants/index.js';
 import { usePageTitle } from '../hooks/usePageTitle.js';
 
 export function LoginPage() {
@@ -38,12 +37,6 @@ export function LoginPage() {
     }
   };
 
-  const handleSelectDemo = (account) => {
-    setEmail(account.email);
-    setPassword(account.password);
-    setError('');
-  };
-
   return (
     <div className="py-12 px-4 sm:px-6 max-w-md mx-auto w-full">
       <div className="text-center mb-8">
@@ -67,7 +60,7 @@ export function LoginPage() {
           <Input
             label="College Email"
             type="email"
-            placeholder="e.g. abdul.ahad@campus.edu"
+            placeholder="e.g. name@college.edu"
             icon={Mail}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -121,25 +114,6 @@ export function LoginPage() {
           >
             Register with College ID
           </Link>
-        </div>
-      </div>
-
-      {/* Quick 1-Click Demo Selector Helper */}
-      <div className="mt-8 p-4 rounded-card border border-campus-border bg-campus-secondary/40 text-xs">
-        <span className="font-semibold text-campus-text-primary block mb-2">
-          Demo Accounts (1-Click Fill):
-        </span>
-        <div className="flex flex-wrap gap-1.5">
-          {DEMO_ACCOUNTS.map((acc, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => handleSelectDemo(acc)}
-              className="px-2.5 py-1 rounded bg-campus-surface border border-campus-border text-[11px] font-medium text-campus-text-primary hover:bg-campus-secondary transition-colors"
-            >
-              {acc.roleName}
-            </button>
-          ))}
         </div>
       </div>
     </div>

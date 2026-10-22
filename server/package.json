@@ -10,7 +10,9 @@
     "build": "prisma generate",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
-    "seed": "node prisma/seed.js",
+    "bootstrap:admin": "node prisma/bootstrapAdmin.js",
+    "seed:demo": "node prisma/seedDemo.js",
+    "seed": "node prisma/seedDemo.js",
     "test": "vitest run"
   },
   "dependencies": {

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { CommunityController } from '../controllers/communityController.js';
 import { CommunityService } from '../services/communityService.js';
 import { authGuard } from '../middleware/authGuard.js';
+import { roleGuard } from '../middleware/roleGuard.js';
 import { sendSuccess } from '../utils/response.js';
 
 const router = Router();
@@ -23,6 +24,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/clubs', CommunityController.getClubs);
+router.post('/clubs', roleGuard('CLUB_COORDINATOR', 'SUPER_ADMIN'), CommunityController.createClub);
 router.get('/clubs/:id', CommunityController.getClubDetails);
 router.post('/clubs/:id/join', CommunityController.joinClub);
 router.post('/clubs/:id/leave', CommunityController.leaveClub);

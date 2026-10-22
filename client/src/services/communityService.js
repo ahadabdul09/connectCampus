@@ -25,4 +25,9 @@ export const communityService = {
     const res = await api.post(`/communities/clubs/${id}/leave`);
     return res.data.data;
   },
+
+  async createClub(data) {
+    const res = await api.post('/communities/clubs', data);
+    return res.data.data;
+  },
 };

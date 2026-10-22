@@ -75,7 +75,7 @@ export function SearchModal({ isOpen, onClose }) {
                   No matching records found for "{debouncedQuery}".
                 </p>
                 <p className="text-xs text-campus-text-secondary">
-                  Try checking for spelling or searching with broader keywords like "Deloitte", "Networks", or "Coding".
+                  Try checking for spelling or searching by department name, course code, or professor name.
                 </p>
               </div>
             ) : null}
@@ -205,7 +205,7 @@ export function SearchModal({ isOpen, onClose }) {
           </div>
         ) : (
           <div className="py-6 text-center text-xs text-campus-text-secondary">
-            Quick suggestion: Try searching for "Deloitte", "Operating Systems", "HackCampus", or "Aptitude".
+            Quick suggestion: Try searching for announcements, syllabus documents, event titles, or campus channels.
           </div>
         )}
       </div>

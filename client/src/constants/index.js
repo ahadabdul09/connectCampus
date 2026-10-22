@@ -1,38 +1,28 @@
-export const DEMO_ACCOUNTS = [
+export const CAMPUS_ROLES_INFO = [
   {
-    roleName: 'Student',
-    email: 'abdul.ahad@campus.edu',
-    password: 'Campus@123',
-    description: '3rd Year Information Science student. Chats in batch groups, downloads resources, registers for events.',
-    badge: 'Undergraduate',
+    roleName: 'Students',
+    description: 'Participate in department channels, batch groups, and club discussions, access academic resources, and view verified campus announcements.',
+    badge: 'Enrolled Students',
   },
   {
     roleName: 'Faculty',
-    email: 'prof.sharma@campus.edu',
-    password: 'Campus@123',
-    description: 'Professor of Operating Systems & ISE Dept Head. Posts academic announcements and uploads lecture resources.',
-    badge: 'Faculty Member',
+    description: 'Broadcast course notices, curate academic repositories, moderate batch discussions, and communicate directly with advisees.',
+    badge: 'Teaching Faculty',
   },
   {
-    roleName: 'Club Coordinator',
-    email: 'vikram.singh@campus.edu',
-    password: 'Campus@123',
-    description: 'Lead for Campus Coding Club. Organizes HackCampus 2026 and manages club community channels.',
-    badge: 'Club Lead',
+    roleName: 'Club Coordinators',
+    description: 'Organize campus societies, announce upcoming workshops and hackathons, coordinate member recruitment, and publish event assets.',
+    badge: 'Student Societies',
   },
   {
-    roleName: 'Department Admin',
-    email: 'dept.admin@campus.edu',
-    password: 'Campus@123',
-    description: 'Department administrator for ISE. Moderates channels and manages course schedules.',
-    badge: 'Staff Admin',
+    roleName: 'Department Administrators',
+    description: 'Maintain department-wide communication, oversee faculty channels, manage curriculum resources, and manage student batch memberships.',
+    badge: 'Academic Staff',
   },
   {
-    roleName: 'Super Admin',
-    email: 'admin@campus.edu',
-    password: 'Campus@123',
-    description: 'Dean of Academic Infrastructure. Has access to the platform analytics dashboard and moderation triage.',
-    badge: 'Campus Superadmin',
+    roleName: 'Super Administrators',
+    description: 'Institution-level authority to manage users, issue verified invitations, supervise departments and clubs, monitor compliance, and audit system metrics.',
+    badge: 'Institutional Governance',
   },
 ];
 

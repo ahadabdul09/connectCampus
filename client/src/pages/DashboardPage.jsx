@@ -207,36 +207,42 @@ export function DashboardPage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {resources.map((res) => (
-                <div
-                  key={res.id}
-                  className="p-3 border border-campus-border rounded-card bg-campus-secondary/20 flex flex-col justify-between hover:bg-campus-secondary/50 transition-colors"
-                >
-                  <div>
-                    <div className="flex items-center justify-between gap-1 mb-1.5">
-                      <Badge variant="neutral">{res.category}</Badge>
-                      <span className="text-[10px] font-mono font-medium text-campus-text-secondary">
-                        {res.fileType}
+            {resources.length === 0 ? (
+              <div className="py-8 text-center text-xs text-campus-text-secondary">
+                No resources uploaded yet. Course documents shared by faculty will appear here.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {resources.map((res) => (
+                  <div
+                    key={res.id}
+                    className="p-3 border border-campus-border rounded-card bg-campus-secondary/20 flex flex-col justify-between hover:bg-campus-secondary/50 transition-colors"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-1 mb-1.5">
+                        <Badge variant="neutral">{res.category}</Badge>
+                        <span className="text-[10px] font-mono font-medium text-campus-text-secondary">
+                          {res.fileType}
+                        </span>
+                      </div>
+                      <h3 className="text-xs font-semibold text-campus-text-primary line-clamp-1">
+                        {res.title}
+                      </h3>
+                      <p className="text-[11px] text-campus-text-secondary line-clamp-2 mt-1">
+                        {res.description || 'Academic reference guide.'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2 mt-2 border-t border-campus-border/50 text-[11px] text-campus-text-muted">
+                      <span>{formatFileSize(res.fileSize)}</span>
+                      <span className="font-medium text-campus-primary">
+                        {res.downloadsCount} downloads
                       </span>
                     </div>
-                    <h3 className="text-xs font-semibold text-campus-text-primary line-clamp-1">
-                      {res.title}
-                    </h3>
-                    <p className="text-[11px] text-campus-text-secondary line-clamp-2 mt-1">
-                      {res.description || 'Academic reference guide.'}
-                    </p>
                   </div>
-
-                  <div className="flex items-center justify-between pt-2 mt-2 border-t border-campus-border/50 text-[11px] text-campus-text-muted">
-                    <span>{formatFileSize(res.fileSize)}</span>
-                    <span className="font-medium text-campus-primary">
-                      {res.downloadsCount} downloads
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </section>
         </div>
 
@@ -259,38 +265,44 @@ export function DashboardPage() {
               </Link>
             </div>
 
-            <div className="flex flex-col gap-3">
-              {announcements.map((ann) => (
-                <div
-                  key={ann.id}
-                  className="p-3 rounded-card border border-campus-border/70 bg-campus-secondary/30 flex flex-col gap-1.5"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-semibold text-campus-text-primary line-clamp-1">
-                      {ann.title}
-                    </span>
-                    <Badge
-                      variant={
-                        ann.priority === 'URGENT'
-                          ? 'urgent'
-                          : ann.priority === 'IMPORTANT'
-                          ? 'primary'
-                          : 'neutral'
-                      }
-                    >
-                      {ann.priority}
-                    </Badge>
+            {announcements.length === 0 ? (
+              <div className="py-6 text-center text-xs text-campus-text-secondary">
+                No announcements published yet.
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                {announcements.map((ann) => (
+                  <div
+                    key={ann.id}
+                    className="p-3 rounded-card border border-campus-border/70 bg-campus-secondary/30 flex flex-col gap-1.5"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-semibold text-campus-text-primary line-clamp-1">
+                        {ann.title}
+                      </span>
+                      <Badge
+                        variant={
+                          ann.priority === 'URGENT'
+                            ? 'urgent'
+                            : ann.priority === 'IMPORTANT'
+                            ? 'primary'
+                            : 'neutral'
+                        }
+                      >
+                        {ann.priority}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-campus-text-secondary line-clamp-2 leading-relaxed">
+                      {ann.content}
+                    </p>
+                    <div className="text-[10px] text-campus-text-muted flex items-center justify-between mt-1">
+                      <span>{ann.author?.fullName}</span>
+                      <span>{formatDate(ann.createdAt)}</span>
+                    </div>
                   </div>
-                  <p className="text-xs text-campus-text-secondary line-clamp-2 leading-relaxed">
-                    {ann.content}
-                  </p>
-                  <div className="text-[10px] text-campus-text-muted flex items-center justify-between mt-1">
-                    <span>{ann.author?.fullName}</span>
-                    <span>{formatDate(ann.createdAt)}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </section>
 
           {/* Upcoming Registered & Campus Events */}
@@ -310,35 +322,41 @@ export function DashboardPage() {
               </Link>
             </div>
 
-            <div className="flex flex-col gap-2.5">
-              {events.map((ev) => (
-                <div
-                  key={ev.id}
-                  className="p-3 rounded-card border border-campus-border bg-campus-secondary/20 flex items-start justify-between gap-3"
-                >
-                  <div className="min-w-0">
-                    <span className="text-xs font-semibold text-campus-text-primary line-clamp-1">
-                      {ev.title}
-                    </span>
-                    <p className="text-[11px] text-campus-text-secondary mt-0.5 truncate">
-                      {ev.location}
-                    </p>
-                    <span className="text-[10px] text-campus-text-muted block mt-1">
-                      {formatDate(ev.eventDate)}
-                    </span>
-                  </div>
-                  <div className="shrink-0 flex flex-col items-end gap-1">
-                    {ev.isRegistered ? (
-                      <Badge variant="success">Registered</Badge>
-                    ) : (
-                      <span className="text-[11px] text-campus-text-muted font-medium">
-                        {ev.registeredCount}/{ev.maxCapacity}
+            {events.length === 0 ? (
+              <div className="py-6 text-center text-xs text-campus-text-secondary">
+                Nothing scheduled yet. Campus events will appear here.
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2.5">
+                {events.map((ev) => (
+                  <div
+                    key={ev.id}
+                    className="p-3 rounded-card border border-campus-border bg-campus-secondary/20 flex items-start justify-between gap-3"
+                  >
+                    <div className="min-w-0">
+                      <span className="text-xs font-semibold text-campus-text-primary line-clamp-1">
+                        {ev.title}
                       </span>
-                    )}
+                      <p className="text-[11px] text-campus-text-secondary mt-0.5 truncate">
+                        {ev.location}
+                      </p>
+                      <span className="text-[10px] text-campus-text-muted block mt-1">
+                        {formatDate(ev.eventDate)}
+                      </span>
+                    </div>
+                    <div className="shrink-0 flex flex-col items-end gap-1">
+                      {ev.isRegistered ? (
+                        <Badge variant="success">Registered</Badge>
+                      ) : (
+                        <span className="text-[11px] text-campus-text-muted font-medium">
+                          {ev.registeredCount}/{ev.maxCapacity}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </section>
 
           {/* Campus Assistant Highlight Box */}
@@ -350,7 +368,7 @@ export function DashboardPage() {
               </h3>
             </div>
             <p className="text-xs text-campus-text-primary leading-relaxed">
-              Have a question regarding exam regulations, Deloitte drive cutoffs, or past placement papers? Ask the verified Campus Assistant anytime.
+              Have a question regarding official university regulations, academic schedules, or department policies? Ask the verified Campus Assistant anytime.
             </p>
           </div>
         </div>

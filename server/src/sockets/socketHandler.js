@@ -18,8 +18,19 @@ export function initializeSockets(io) {
       return next(new Error('Invalid or expired WebSocket authentication token.'));
     }
 
-    socket.user = payload;
-    next();
+    prisma.user
+      .findUnique({
+        where: { id: payload.userId },
+        select: { id: true, isActive: true },
+      })
+      .then((dbUser) => {
+        if (!dbUser || dbUser.isActive === false) {
+          return next(new Error('User account is inactive.'));
+        }
+        socket.user = payload;
+        next();
+      })
+      .catch((err) => next(err));
   });
 
   io.on('connection', async (socket) => {

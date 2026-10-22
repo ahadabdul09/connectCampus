@@ -20,6 +20,10 @@ export const ENV = {
   JWT_REFRESH_EXPIRATION: process.env.JWT_REFRESH_EXPIRATION || '7d',
   UPLOAD_DIR: process.env.UPLOAD_DIR || path.resolve(__dirname, '../../uploads'),
   MAX_FILE_SIZE_MB: parseInt(process.env.MAX_FILE_SIZE_MB || '25', 10),
+  COLLEGE_EMAIL_DOMAIN: (process.env.COLLEGE_EMAIL_DOMAIN || '').trim().toLowerCase(),
+  ADMIN_NAME: process.env.ADMIN_NAME || 'Campus Administrator',
+  ADMIN_EMAIL: (process.env.ADMIN_EMAIL || 'admin@campus.edu').trim().toLowerCase(),
+  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || '',
   AI_API_KEY: process.env.AI_API_KEY || process.env.GEMINI_API_KEY || '',
   AI_PROVIDER: process.env.AI_PROVIDER || 'gemini',
 };

@@ -64,7 +64,7 @@ describe('Zustand Stores Architecture Tests', () => {
       const incomingMsg = {
         id: 'msg-101',
         conversationId: convId,
-        content: 'Deloitte shortlist has been uploaded.',
+        content: 'Academic schedule has been uploaded.',
         createdAt: new Date().toISOString(),
         sender: { id: 'u-faculty', fullName: 'Dr. Sharma' },
       };
@@ -73,8 +73,8 @@ describe('Zustand Stores Architecture Tests', () => {
 
       const state = useChatStore.getState();
       expect(state.messages.length).toBe(1);
-      expect(state.messages[0].content).toBe('Deloitte shortlist has been uploaded.');
-      expect(state.conversations[0].latestMessage.content).toBe('Deloitte shortlist has been uploaded.');
+      expect(state.messages[0].content).toBe('Academic schedule has been uploaded.');
+      expect(state.conversations[0].latestMessage.content).toBe('Academic schedule has been uploaded.');
     });
 
     it('removes a message from state on delete', () => {

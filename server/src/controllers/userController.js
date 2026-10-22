@@ -57,12 +57,26 @@ export class UserController {
 
   static async listCampusUsers(req, res, next) {
     try {
-      const departmentId = req.query.departmentId;
+      const { departmentId, search } = req.query;
+      const where = {
+        id: { not: req.user.id },
+        isActive: true,
+      };
+
+      if (departmentId) {
+        where.departmentId = departmentId;
+      }
+
+      if (search && search.trim()) {
+        const q = search.trim();
+        where.OR = [
+          { fullName: { contains: q } },
+          { email: { contains: q } },
+        ];
+      }
+
       const users = await prisma.user.findMany({
-        where: {
-          id: { not: req.user.id },
-          ...(departmentId && { departmentId }),
-        },
+        where,
         select: {
           id: true,
           fullName: true,
@@ -71,7 +85,7 @@ export class UserController {
           batch: true,
           avatarUrl: true,
           isOnline: true,
-          department: { select: { code: true, name: true } },
+          department: { select: { id: true, code: true, name: true } },
         },
         take: 30,
         orderBy: { fullName: 'asc' },

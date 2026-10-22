@@ -43,4 +43,20 @@ export class AIController {
       next(error);
     }
   }
+
+  static async uploadDocument(req, res, next) {
+    try {
+      const { title, category, departmentId, content } = req.body;
+      const result = await AIService.ingestDocument({
+        title,
+        category,
+        departmentId,
+        uploaderId: req.user.id,
+        content,
+      });
+      sendSuccess(res, result, 'Campus document ingested and chunked for AI retrieval.', 201);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

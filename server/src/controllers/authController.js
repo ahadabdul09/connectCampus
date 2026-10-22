@@ -1,5 +1,10 @@
 import { AuthService } from '../services/authService.js';
-import { registerSchema, loginSchema, refreshSchema } from '../validators/authValidator.js';
+import {
+  registerSchema,
+  loginSchema,
+  refreshSchema,
+  acceptInviteSchema,
+} from '../validators/authValidator.js';
 import { sendSuccess } from '../utils/response.js';
 
 export class AuthController {
@@ -8,6 +13,26 @@ export class AuthController {
       const validated = registerSchema.parse(req.body);
       const result = await AuthService.register(validated);
       sendSuccess(res, result, 'Registration successful.', 201);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async verifyInvite(req, res, next) {
+    try {
+      const { token } = req.params;
+      const result = await AuthService.verifyInviteToken(token);
+      sendSuccess(res, result, 'Invitation token verified.');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async acceptInvite(req, res, next) {
+    try {
+      const validated = acceptInviteSchema.parse(req.body);
+      const result = await AuthService.registerWithInvite(validated);
+      sendSuccess(res, result, 'Invitation accepted. Account activated.', 201);
     } catch (error) {
       next(error);
     }
